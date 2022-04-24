@@ -34,14 +34,57 @@ The third argument, props, is a set of initialization properties that are specif
 The library contains three levels of constructs: AWS CDK pattern constructs, AWS resource constructs, and AWS CloudFormation resource constructs.
 * **AWS CDK pattern constructs**
 Level 3 includes AWS CDK pattern constructs, developed by AWS engineers, and provides opinionated best-practice patterns by default. These higher-level constructs stitch together multiple resources and generally represent reference architectures or design patterns to help you complete common tasks in AWS.
+* **AWS resource constructs**
+AWS resource constructs represent AWS resources but with a higher level of purpose. They provide the same resource functionality, but they handle many of the details required by AWS CloudFormation resource constructs. AWS resource constructs use established defaults, reducing the need to know all the details about the AWS resources the construct is representing. This provides a convenient method to work with the resource. 
+* **AWS CloudFormation resource constructs**
+AWS CloudFormation Resource constructs are the lowest-level (L1) constructs. They mirror the AWS CloudFormation resource types and are updated with each release of AWS CDK
 
 ### Stacks
 Stacks are a unit of deployment in AWS CDK. All AWS resources defined within the scope of a stack, directly or indirectly, are provisioned as a single unit. Because AWS CDK stacks are implemented through AWS CloudFormation stacks, they have the same limitations. You can define any number of stacks in an AWS CDK app.
 
 ### Apps
 Your CDK application is an app, and is represented by the AWS CDK App class. To provision infrastructure resources, all constructs that represent AWS resources must be defined, directly or indirectly, within the scope of a stack construct.
+<img src="https://assets.skillbuilder.aws/files/a/w/aws_prod1_docebosaas_com/1650816000/_ax19IVBtunBmvEFOfO-JA/tincan/b450fd4f5b346b88f24b2c75349b1a15f069c464/assets/35iXDRdrjn8Nk9hW_o1GeBcztj7Zu-nXK.png">
+* The App construct
+Every AWS CDK application is represented by the AWS CDK class App. Made up of one or more stacks, Apps can contain one or more constructs. 
+The App construct represents the entire AWS CDK app. This construct is normally the root of the construct tree.
+### Nested stacks
+AWS CDK gains its deployment power from AWS CloudFormation. However, it is also bound by AWS CloudFormation resource limit of 200 resources. A way around the resource limit is to create a nested stack. 
+<img src="https://assets.skillbuilder.aws/files/a/w/aws_prod1_docebosaas_com/1650816000/_ax19IVBtunBmvEFOfO-JA/tincan/b450fd4f5b346b88f24b2c75349b1a15f069c464/assets/I60wZKU7T-vLcMN4_x8d81O70Or0zJN2x.png">
 
 ## How AWS CDK interacts with supported programming languages
 AWS builds the business logic of AWS Construct Library packages in TypeScript, and uses AWS JSii to provide mappings to each supported programming language.
 
+## AWS CDK Concepts
+To use the AWS CDK, you must understand key concepts that make up an AWS CDK App. This module will focus on identifiers, environments, contexts, and assets.
+### Identifiers
+AWS CDK uses various types of identifiers. To use the AWS CDK effectively and avoid errors, you need to understand the types of identifiers.
 
+Identifiers must be unique within the scope in which they were created. Familiarize yourself with the types of identifiers used:
+* Construct IDs
+* Paths
+* Unique IDs
+* Logical IDs
+
+* Construct IDs
+id is the most common identifier. It is passed as the second argument when instantiating a construct. 
+This identifier must be unique only in the scope in which it is created, which is the first argument when instantiating a construct.
+
+* Paths
+The constructs in an AWS CDK application form a hierarchy rooted in the App class. This hierarchy is called a path.
+The path refers to the collection of IDs from a given construct, its parent construct, its grandparent, and so on, to the root of the construct tree. AWS CDK displays paths in your templates as a string, with the IDs from the levels separated by slashes.
+* Unique IDs
+AWS CDK requires that all identifiers in an AWS CloudFormation template are unique. 
+To meet this requirement, AWS CDK generates a unique identifier for each construct in an application. AWS CDK uses the construct path to generate an eight-character hash.
+
+### Environments
+Environment (env) represents the AWS account and AWS Region in which a stack is deployed. 
+
+Example :
+```typescript
+const app = new cdk.App();
+const env1 = { account: '444455556666', region:'us-west-1'};
+const env2 = { account: '123456789012', region:'us-west-2'};
+new CdkPrimerStack(app, 'CdkPrimerStack', { env: env1 });
+new CdkPrimerStack(app, 'CdkPrimerStack2', { env: env2 });
+```
