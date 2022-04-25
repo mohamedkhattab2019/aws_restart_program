@@ -88,3 +88,24 @@ const env2 = { account: '123456789012', region:'us-west-2'};
 new CdkPrimerStack(app, 'CdkPrimerStack', { env: env1 });
 new CdkPrimerStack(app, 'CdkPrimerStack2', { env: env2 });
 ```
+<a href="https://docs.aws.amazon.com/es_es/cdk/latest/guide/environments.html" rel="noopener noreferrer" target="_blank" tabindex="0" aria-hidden="false">AWS CDK documentation</a>
+
+### Context
+Context values are key-value pairs that can be associated with a stack or construct.
+AWS CDK uses context to cache information from your AWS account, such as the Availability Zones in your account or the Amazon Machine Image (AMI) IDs used to start your instances. You can create your own context values that your apps or constructs can use.
+
+Context values that you create are scoped to the construct that created them, meaning they are visible to child constructs but not to siblings. Context values set by the AWS CDK Toolkit are set on the App construct, and so they are visible to every construct in the app
+
+**Context method:**
+You might need to retrieve contextual information that is useful for your AWS CDK app. AWS CDK supports several context methods that AWS CDK apps can use to retrieve context information.
+  
+* HostedZone.fromLookup – Retrieves the hosted zones in your account
+* stack.availabilityZones – Retrieves the supported Availability Zones
+* StringParameter.valueFromLookup – Retrieves a value from the Amazon EC2 Systems Manager Parameter Store in the current Region
+* Vpc.fromLookup – Retrieves the existing Amazon VPC in your accounts
+* LookupMachineImage – Looks up an AMI for use with a Network Address Translation (NAT) instance in an Amazon VPC
+
+If a given context isn't available, AWS CDK app notifies the AWS CDK CLI that the context information is missing. The CLI then performs the following actions:
+* Queries the current AWS account for the information
+* Stores the resulting context information in the cdk.context.json file
+
